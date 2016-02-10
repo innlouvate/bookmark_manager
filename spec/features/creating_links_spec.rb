@@ -10,6 +10,7 @@ feature 'Creating links' do
     end
   end
 
+
   scenario 'I can add tags to a given link whilst saving it' do
     visit '/links'
     click_button 'Add link'
@@ -18,7 +19,7 @@ feature 'Creating links' do
     fill_in 'tag', with: 'social'
     click_button 'Submit'
     within 'ul#links' do
-      expect(page).to have_content("Tag: Social")
+      expect(page).to have_content("Tags: social")
     end
   end
 end
