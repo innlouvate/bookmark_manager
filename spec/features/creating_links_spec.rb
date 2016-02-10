@@ -22,4 +22,5 @@ feature 'Creating links' do
       expect(page).to have_content("Tags: social")
     end
   end
+
 end

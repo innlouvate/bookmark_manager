@@ -23,9 +23,14 @@ class BookmarkManager < Sinatra::Base
 
   post '/links' do
     @link = Link.create(:title => params[:title], :url => params[:url])
-    @tag = Tag.create(:tag => params[:tag])
-    @link.tags << @tag
-    @link.save
+    params[:tag].split(",").map(&:strip).each do |tag|
+        # if tag == Tag.first(tag: tag)
+        #   @link.tags << tag
+        # else
+          @link.tags << Tag.create(tag: tag)
+        # end
+      end
+      @link.save
     redirect '/links'
   end
 
@@ -36,7 +41,7 @@ class BookmarkManager < Sinatra::Base
 
   get '/tags/:search' do
     # check it's a tag
-    tag = Tag.first(tag: params[:search])
+    tag = Tag.all(tag: params[:search])
     @list = tag ? tag.links : []
     erb(:links)
   end
