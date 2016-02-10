@@ -13,12 +13,12 @@ class BookmarkManager < Sinatra::Base
   end
 
   get '/links' do
-    @links = Link.all
-    erb (:links)
+    @list = Link.all
+    erb(:links)
   end
 
   get '/links/new' do
-    erb (:new_link)
+    erb(:new_link)
   end
 
   post '/links' do
@@ -27,6 +27,18 @@ class BookmarkManager < Sinatra::Base
     @link.tags << @tag
     @link.save
     redirect '/links'
+  end
+
+  post '/tags' do
+    @search = params[:search]
+    redirect "/tags/#{@search}"
+  end
+
+  get '/tags/:search' do
+    # check it's a tag
+    tag = Tag.first(tag: params[:search])
+    @list = tag ? tag.links : []
+    erb(:links)
   end
 
   # start the server if ruby file executed directly

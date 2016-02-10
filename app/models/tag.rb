@@ -8,6 +8,6 @@ class Tag
   property :tag, String
 
   # has n, :linktags
-  # has n, :links, :through => Resource
+  has n, :links, :through => Resource
 
 end

@@ -4,17 +4,22 @@
 <body>
   <h1>Links</h1>
   <ul id='links'>
-    <% @links.each do |link| %>
+    <% @list.each do |link| %>
       <li>
         Title: <%= link.title %>
         URL: <%= link.url %>
         Tags: <%= link.tags.map(&:tag).join("") %>
       </li>
     <% end %>
-
   </ul>
 
   <form action='/links/new'>
     <input type="submit" value="Add link">
   </form>
+
+  <form action='/tags' method='POST'>
+    <input type='text' name='search'>
+    <input type="submit" value="Search links">
+  </form>
+
 </body>
