@@ -27,7 +27,7 @@ class BookmarkManager < Sinatra::Base
         # if tag == Tag.first(tag: tag)
         #   @link.tags << tag
         # else
-          @link.tags << Tag.create(tag: tag)
+          @link.tags << Tag.first_or_create(tag: tag)
         # end
       end
       @link.save
@@ -41,7 +41,7 @@ class BookmarkManager < Sinatra::Base
 
   get '/tags/:search' do
     # check it's a tag
-    tag = Tag.all(tag: params[:search])
+    tag = Tag.first(tag: params[:search])
     @list = tag ? tag.links : []
     erb(:links)
   end
