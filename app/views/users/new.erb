@@ -4,14 +4,16 @@
 <body>
   <h1>Log in</h1>
 
-  <%= flash.now[:error] %>
+  <% if flash[:error] %>
+    <div id='notice'><%= flash[:error] %></div>
+  <% end %>
 
   <form action='/users' method='POST'>
-    <p>Username: <input type='text' name='username'>
-    <p>Email: <input type='text' name='email'>
+    <p>Username: <input type='text' name='username' value='<%= @user.username %>'>
+    <p>Email: <input type='text' name='email' value='<%= @user.email %>'>
     <p>Password: <input type='password' name='password'>
     <p>Password Confirmation: <input type='password' name='password_confirmation'>
-    <input type="submit" value="Sign up">
+    <p><input type="submit" value="Sign up">
   </form>
 
 </body>

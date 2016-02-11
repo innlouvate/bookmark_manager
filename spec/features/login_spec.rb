@@ -29,7 +29,7 @@ feature 'successful login' do
   scenario 'stay on the same page when mismatching passwords entered' do
     incorrect_sign_up
     click_button 'Sign up'
-    expect(current_path).to eq('/users/new')
+    expect(current_path).to eq('/users')
   end
 
   scenario 'user count does not increase when passwords do not match' do
