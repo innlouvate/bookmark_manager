@@ -1,4 +1,3 @@
-
 feature 'successful login' do
   scenario 'when a user signs up, the User count increases by 1' do
     visit '/users/new'
@@ -36,4 +35,41 @@ feature 'successful login' do
     incorrect_sign_up
     expect{click_button 'Sign up'}.to change{User.count}.by(0)
   end
+
+  scenario 'user count does not increase if blank email entered' do
+    visit '/users/new'
+    fill_in 'username', with: 'Bob'
+    fill_in 'email', with: ''
+    fill_in 'password', with: 'aa'
+    fill_in 'password_confirmation', with: 'aa'
+    expect{click_button 'Sign up'}.to change{User.count}.by(0)
+  end
+
+  scenario 'user count does not increase if email is in email format' do
+    visit '/users/new'
+    fill_in 'username', with: 'Bob'
+    fill_in 'email', with: 'something'
+    fill_in 'password', with: 'aa'
+    fill_in 'password_confirmation', with: 'aa'
+    expect{click_button 'Sign up'}.to change{User.count}.by(0)
+  end
+
+  scenario 'user count does not increase if blank password entered' do
+    visit '/users/new'
+    fill_in 'username', with: 'Bob'
+    fill_in 'email', with: 'somthing@gmail.com'
+    fill_in 'password', with: ''
+    fill_in 'password_confirmation', with: ''
+    expect{click_button 'Sign up'}.to change{User.count}.by(0)
+  end
+
+  scenario 'user count does not increase if blank username entered' do
+    visit '/users/new'
+    fill_in 'username', with: ''
+    fill_in 'email', with: 'somthing@gmail.com'
+    fill_in 'password', with: 'aa'
+    fill_in 'password_confirmation', with: 'aa'
+    expect{click_button 'Sign up'}.to change{User.count}.by(0)
+  end
+
 end

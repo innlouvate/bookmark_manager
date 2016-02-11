@@ -8,6 +8,7 @@ require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
 require './app/models/link.rb'
+require_relative 'features/web_helper'
 require_relative 'database_cleaner_helper.rb'
 
 Capybara.app = BookmarkManager

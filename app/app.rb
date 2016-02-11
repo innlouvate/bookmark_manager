@@ -1,3 +1,5 @@
+ENV['RACK_ENV'] ||= 'development'
+
 require 'sinatra/base'
 require_relative 'models/link.rb'
 require_relative 'models/tag.rb'
@@ -11,7 +13,7 @@ class BookmarkManager < Sinatra::Base
   set :session_secret, 'super secret'
   register Sinatra::Flash
 
-  ENV['RACK_ENV'] ||= 'development'
+
 
   helpers do
     def current_user
