@@ -13,6 +13,12 @@ def create_bookmarks
   fill_in 'url', with: 'http://bub-bub.com'
   fill_in 'tag', with: 'bubbles'
   click_button 'Submit'
+
+  click_button 'Add link'
+  fill_in 'title', with: "Facebook"
+  fill_in 'url', with: 'http://facebook.com'
+  fill_in 'tag', with: 'procrastination, bubbles'
+  click_button 'Submit'
 end
 
 def create_user

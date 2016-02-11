@@ -18,12 +18,7 @@ feature 'can filter links based on tags' do
     scenario 'can input multiple tags and filter on one of the tags' do
       create_user
       create_bookmarks
-      click_button 'Add link'
-      fill_in 'title', with: "Facebook"
-      fill_in 'url', with: 'http://facebook.com'
-      fill_in 'tag', with: 'procrastination, bubbles'
-      click_button 'Submit'
-
+      visit '/links'
       fill_in 'search', with: 'bubbles'
       click_button 'Search links'
       # visit '/tags/bubbles'
