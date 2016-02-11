@@ -4,6 +4,8 @@
 <body>
   <h1>Log in</h1>
 
+  <%= flash.now[:error] %>
+
   <form action='/users' method='POST'>
     <p>Username: <input type='text' name='username'>
     <p>Email: <input type='text' name='email'>
@@ -13,4 +15,3 @@
   </form>
 
 </body>
-

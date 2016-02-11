@@ -21,21 +21,19 @@ feature 'successful login' do
   end
 
   scenario 'mismatching passwords causes error message' do
-    visit '/users/new'
-    fill_in 'username', with: 'Bob'
-    fill_in 'email', with: 'bob@bobmail.com'
-    fill_in 'password', with: 'secret'
-    fill_in 'password_confirmation', with: 'anything_but_secret'
+    incorrect_sign_up
     click_button 'Sign up'
-    expect(page).to have_content 'ERROR: Passwords do not match'
+    expect(page).to have_content 'Password and confirmation password do not match'
   end
 
-  scenario '' do
-    visit '/users/new'
-    fill_in 'username', with: 'Bob'
-    fill_in 'email', with: 'bob@bobmail.com'
-    fill_in 'password', with: 'secret'
-    fill_in 'password_confirmation', with: 'anything_but_secret'
+  scenario 'stay on the same page when mismatching passwords entered' do
+    incorrect_sign_up
+    click_button 'Sign up'
+    expect(current_path).to eq('/users/new')
+  end
+
+  scenario 'user count does not increase when passwords do not match' do
+    incorrect_sign_up
     expect{click_button 'Sign up'}.to change{User.count}.by(0)
   end
 end

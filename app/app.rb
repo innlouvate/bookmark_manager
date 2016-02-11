@@ -3,21 +3,21 @@ require_relative 'models/link.rb'
 require_relative 'models/tag.rb'
 require_relative 'models/user.rb'
 require_relative 'data_mapper_setup.rb'
+require 'sinatra/flash'
 require 'tilt/erb'
-# require_relative 'helper'
 
 class BookmarkManager < Sinatra::Base
   enable :sessions
   set :session_secret, 'super secret'
-  # include Helpers
+  register Sinatra::Flash
 
   ENV['RACK_ENV'] ||= 'development'
 
-  # helpers do
-  #   def current_user
-  #     @current_user ||= User.get(session[:user_id])
-  #   end
-  # end
+  helpers do
+    def current_user
+      @current_user ||= User.get(session[:user_id])
+    end
+  end
 
   get '/' do
     redirect '/users/new'
@@ -30,11 +30,12 @@ class BookmarkManager < Sinatra::Base
   post '/users' do
     user = User.create(:username => params[:username], :email => params[:email], :password => params[:password], :password_confirmation => params[:password_confirmation])
     session[:user_id] = user.id
-    params[:password] == params[:password_confirmation] ? redirect('/links') : redirect('/users/failed')
-  end
-
-  get '/users/failed' do
-    erb :'users/failed'
+    if params[:password] == params[:password_confirmation]
+      redirect('/links')
+    else
+      flash[:error] = "Password and confirmation password do not match"
+      redirect('/users/new')
+    end
   end
 
   get '/links' do
@@ -67,10 +68,6 @@ class BookmarkManager < Sinatra::Base
     tag = Tag.first(tag: params[:search])
     @list = tag ? tag.links : []
     erb(:links)
-  end
-
-  def current_user
-    @current_user ||= User.get(session[:user_id])
   end
 
   # start the server if ruby file executed directly
