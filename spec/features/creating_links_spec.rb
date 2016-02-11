@@ -1,5 +1,8 @@
+require_relative 'web_helper'
+
 feature 'Creating links' do
   scenario 'I can save links' do
+    create_user
     visit '/links'
     click_button 'Add link'
     fill_in 'title', with: "Lou's blog"
@@ -12,6 +15,7 @@ feature 'Creating links' do
 
 
   scenario 'I can add tags to a given link whilst saving it' do
+    create_user
     visit '/links'
     click_button 'Add link'
     fill_in 'title', with: "Lou's blog"

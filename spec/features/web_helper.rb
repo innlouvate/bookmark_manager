@@ -14,3 +14,11 @@ def create_bookmarks
   fill_in 'tag', with: 'bubbles'
   click_button 'Submit'
 end
+
+def create_user
+  visit '/users/new'
+  fill_in 'username', with: 'Bob'
+  fill_in 'email', with: 'bob@bobmail.com'
+  fill_in 'password', with: 'secret'
+  click_button 'Sign up'
+end

@@ -7,7 +7,6 @@ class Tag
   property :id, Serial
   property :tag, String
 
-  # has n, :linktags
   has n, :links, :through => Resource
 
 end

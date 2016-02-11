@@ -1,19 +1,41 @@
 require 'sinatra/base'
 require_relative 'models/link.rb'
 require_relative 'models/tag.rb'
+require_relative 'models/user.rb'
 require_relative 'data_mapper_setup.rb'
+require 'tilt/erb'
+# require_relative 'helper'
 
 class BookmarkManager < Sinatra::Base
+  enable :sessions
+  set :session_secret, 'super secret'
+  # include Helpers
 
   ENV['RACK_ENV'] ||= 'development'
-  # set :environment, :development
+
+  # helpers do
+  #   def current_user
+  #     @current_user ||= User.get(session[:user_id])
+  #   end
+  # end
 
   get '/' do
-    'Hello BookmarkManager!'
+    redirect '/users/new'
+  end
+
+  get '/users/new' do
+    erb :'users/new'
+  end
+
+  post '/users' do
+    user = User.create(:username => params[:username], :email => params[:email], :password => params[:password])
+    session[:user_id] = user.id
+    redirect '/links'
   end
 
   get '/links' do
     @list = Link.all
+    @user = current_user
     erb(:links)
   end
 
@@ -24,11 +46,7 @@ class BookmarkManager < Sinatra::Base
   post '/links' do
     @link = Link.create(:title => params[:title], :url => params[:url])
     params[:tag].split(",").map(&:strip).each do |tag|
-        # if tag == Tag.first(tag: tag)
-        #   @link.tags << tag
-        # else
           @link.tags << Tag.first_or_create(tag: tag)
-        # end
       end
       @link.save
     redirect '/links'
@@ -41,9 +59,14 @@ class BookmarkManager < Sinatra::Base
 
   get '/tags/:search' do
     # check it's a tag
+    @user = current_user
     tag = Tag.first(tag: params[:search])
     @list = tag ? tag.links : []
     erb(:links)
+  end
+
+  def current_user
+    @current_user ||= User.get(session[:user_id])
   end
 
   # start the server if ruby file executed directly
