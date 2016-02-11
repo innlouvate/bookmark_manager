@@ -26,5 +26,6 @@ def create_user
   fill_in 'username', with: 'Bob'
   fill_in 'email', with: 'bob@bobmail.com'
   fill_in 'password', with: 'secret'
+  fill_in 'password_confirmation', with: 'secret'
   click_button 'Sign up'
 end

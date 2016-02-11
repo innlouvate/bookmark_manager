@@ -28,9 +28,13 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/users' do
-    user = User.create(:username => params[:username], :email => params[:email], :password => params[:password])
+    user = User.create(:username => params[:username], :email => params[:email], :password => params[:password], :password_confirmation => params[:password_confirmation])
     session[:user_id] = user.id
-    redirect '/links'
+    params[:password] == params[:password_confirmation] ? redirect('/links') : redirect('/users/failed')
+  end
+
+  get '/users/failed' do
+    erb :'users/failed'
   end
 
   get '/links' do
