@@ -23,4 +23,14 @@ class User
   validates_presence_of :email
   validates_format_of :email, :as => :email_address
   validates_uniqueness_of :email
+
+  def self.authenticate(email, password)
+    user = first(email: email)
+    if user && BCrypt::Password.new(user.password_digest) == password
+      user
+    else
+      nil
+    end
+  end
+
 end
