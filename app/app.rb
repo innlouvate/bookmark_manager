@@ -7,21 +7,10 @@ require_relative 'models/link'
 
 
 class Bookmark < Sinatra::Base
-
+  enable :sessions
+  set :session_secret, 'super secret'
   register Sinatra::Flash
-
-
-    # def is_user?
-    #   current_user != nil
-    # end
-  #
-  # register do
-  #   def auth (type)
-  #     condition do
-  #       redirect "/users/sign_in" unless send("is_#{type}?")
-  #     end
-  #   end
-  # end
+  use Rack::MethodOverride
 
   get '/' do
     redirect to('/users/sign_in')
@@ -29,7 +18,6 @@ class Bookmark < Sinatra::Base
 
   get '/link' do
     @link = Link.all
-    @current_user = current_user
     erb :index
   end
 
@@ -73,9 +61,9 @@ class Bookmark < Sinatra::Base
   end
 
   post '/sessions' do
-    @user = User.authenticate(params[:email], params[:password])
-    if @user
-      session[:user_id] = @user.id
+    user = User.authenticate(params[:email], params[:password])
+    if user
+      session[:user_id] = user.id
       redirect to('/link')
     else
       flash.now[:error] = 'Email or password is incorrect'
@@ -83,9 +71,15 @@ class Bookmark < Sinatra::Base
     end
   end
 
+  delete '/sessions' do
+    session[:user_id] = nil
+    flash.keep[:notice] = 'Come back soon'
+    redirect to '/link'
+  end
+
   helpers do
     def current_user
-      p @current_user ||=User.get(session[:user_id])
+      @current_user ||=User.get(session[:user_id])
     end
   end
 
